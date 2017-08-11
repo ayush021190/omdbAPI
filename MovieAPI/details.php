@@ -1,11 +1,13 @@
 <?php 
+	require_once 'config.php';
 	require_once 'includes/header.php';
-	session_start();
 	$count = count($_SESSION['ids'])+1;
 	$_SESSION['ids']['data'.$count] = $_GET['id'];
 	// array_push($_SESSION['ids'], $_GET['id']);
 ?>
 
+<input type="hidden" id="api_key" value="<?php echo APIKEY; ?>">
+<input type="hidden" id="base_url" value="<?php echo BASEURL;?>">
 <input type="hidden" id="movie_id" value="<?php echo $_GET['id'];?>">
 <div class="container">
 	<div class="row">

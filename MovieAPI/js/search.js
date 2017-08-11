@@ -1,15 +1,4 @@
 $(document).ready(function() {
-	var baseUrl = '';
-	console.log(movie_ids);
-// config API
-	$.ajax({
-		url: 'https://api.themoviedb.org/3/configuration?api_key=d6ed539a741ec0415b9f5118b1645d93',
-		type: 'GET',
-		dataType: 'json',
-	})
-	.done(function(json) {
-		baseUrl = json.images.base_url;
-	});
 	
 //  search API
 
@@ -19,14 +8,14 @@ $(document).ready(function() {
 		if(event.which == 13) {
 			// window.location.href = "card.php?search="+ $('#search').val();
 			$.ajax({
-					url: 'https://api.themoviedb.org/3/search/movie?api_key=d6ed539a741ec0415b9f5118b1645d93&query=' + $('#search').val(),
+					url: 'https://api.themoviedb.org/3/search/movie?api_key='+ $('#api_key').val()+'&query=' + $('#search').val(),
 					type: 'GET',
 					dataType: 'json',
 				}).done(function(json) {
-					$('#main').append('<table><tr>');
+					$('#main').append('<h1> Search results</h1><table><tr>');
 					$(json.results).each(function(index, el) {
 						var card_data = '<td><div class="card card-top" style="width: 20rem;">'+
-  											'<img class="card-img-top" src="'+ baseUrl +'w92'+ el.poster_path + '" alt="Card image cap">'+
+  											'<img class="card-img-top" src="'+ $('#base_url').val() +'w92'+ el.poster_path + '" alt="Card image cap">'+
 			 								'<div class="card-block">'+
 				    							'<h4 class="card-title">'+ el.title +'</h4>'+
 				    							'<p class="card-text">'+ el.release_date +'</p>'+
@@ -44,7 +33,7 @@ $(document).ready(function() {
 		} else {
 			if ($('#search').val().length >= 3) {
 				$.ajax({
-					url: 'https://api.themoviedb.org/3/search/movie?api_key=d6ed539a741ec0415b9f5118b1645d93&query=' + $('#search').val(),
+					url: 'https://api.themoviedb.org/3/search/movie?api_key='+ $('#api_key').val() +'&query=' + $('#search').val(),
 					type: 'GET',
 					dataType: 'json',
 				})
@@ -57,7 +46,7 @@ $(document).ready(function() {
 											  	'<div class="results row">'+
 											  		'<div class="item col-md-12">' +
 											  			'<div class="col-md-2 text-center col-xs-3">' +
-											  				'<img class="img-responsive" src="'+ baseUrl +'w92'+ el.poster_path + '"/>'+
+											  				'<img class="img-responsive" src="'+ $('#base_url').val() +'w92'+ el.poster_path + '"/>'+
 											  			'</div>' +
 											  			'<div class="col-md-5 col-xs-7">' +
 											  				'<p>'+ el.title + '</p>'+
@@ -76,22 +65,5 @@ $(document).ready(function() {
 			}			
 		}
 	});
-// last search records API
-   
-	if(($('#m_ids').length) && ($('#m_ids').val().length != 0)) {
-		var movieIDs = $('#m_ids').val();
-		console.log($('#m_ids').val());
-		// $(movieIDs).each(function(index, el) {
-		// 	$.ajax({
-		// 		url: 'https://api.themoviedb.org/3/movie/'+ el +'?api_key=d6ed539a741ec0415b9f5118b1645d93',
-		// 		type: 'GET',
-		// 		dataType: 'json',
-		// 	})
-		// 	.done(function(json) {
-		// 		console.log(json);
-		// 	});
-			
-		// });
-		
-	}
+
 });

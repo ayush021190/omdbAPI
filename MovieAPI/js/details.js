@@ -1,16 +1,8 @@
 $(document).ready(function() {
-	var baseUrl = '';
-	$.ajax({
-		url: 'https://api.themoviedb.org/3/configuration?api_key=d6ed539a741ec0415b9f5118b1645d93',
-		type: 'GET',
-		dataType: 'json',
-	})
-	.done(function(json) {
-		baseUrl = json.images.base_url;
-	});
 
+// Details API
 	$.ajax({
-		url: 'https://api.themoviedb.org/3/movie/'+ $('#movie_id').val()+'?api_key=d6ed539a741ec0415b9f5118b1645d93',
+		url: 'https://api.themoviedb.org/3/movie/'+ $('#movie_id').val()+'?api_key=' + $('#api_key').val(),
 		type: 'GET',
 		dataType: 'json',
 	})
@@ -19,7 +11,7 @@ $(document).ready(function() {
 						'<h1 >'+ json.original_title + '</h1>'+
 					'</div>'+
 					'<div class="col-md-3">'+
-						'<img class="img-responsive" src="'+ baseUrl + 'w500' + json.poster_path + '">'+
+						'<img class="img-responsive" src="'+ $('#base_url').val() + 'w500' + json.poster_path + '">'+
 					'</div>' +
 					'<div class="col-md-5">'+
 						'<p>'+ json.overview + '</p>'+

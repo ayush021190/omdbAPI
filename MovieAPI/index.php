@@ -1,7 +1,7 @@
 <?php 
+	require_once 'config.php';
 	$customCSS = '<link rel="stylesheet" href="css/search.css">';
 	require_once 'includes/header.php';
-	session_start();
 	if(!isset($_SESSION['ids'])) {	    
 		$_SESSION['ids'] = [];
 	}
@@ -9,7 +9,8 @@
 	// var_dump($_SESSION);
 	
 ?>
-
+<input type="hidden" id="api_key" value="<?php echo APIKEY; ?>">
+<input type="hidden" id="base_url" value="<?php echo BASEURL;?>">
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -25,36 +26,14 @@
 </div>
 <div class="container">
 	<div class="row">
-		<?php if(isset($_SESSION['ids']) && !empty($_SESSION)){
-		    
-		    $curl = curl_init();
-			curl_setopt_array($curl, array(
-			  CURLOPT_URL => "https://api.themoviedb.org/3/configuration?api_key=d6ed539a741ec0415b9f5118b1645d93",
-			  CURLOPT_RETURNTRANSFER => true,
-			  CURLOPT_ENCODING => "",
-			  CURLOPT_MAXREDIRS => 10,
-			  CURLOPT_TIMEOUT => 30,
-			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			  CURLOPT_CUSTOMREQUEST => "GET",
-			  CURLOPT_POSTFIELDS => "{}",
-			));
-
-			$responseConfig = json_decode(curl_exec($curl), true);
-			// var_dump("https://api.themoviedb.org/3/movie/". $data['data'. $key + 1] ."?&api_key=d6ed539a741ec0415b9f5118b1645d93");
-			$error = curl_error($curl);
-
-			curl_close($curl);
-
-			if ($error) {
-			  echo "cURL Error #:" . $error;
-			}
-			?>
+		<h1>Last Search items</h1>
+		<?php if(isset($_SESSION['ids']) && !empty($_SESSION)){?>
 		<table><tr>
-		<?php foreach ($_SESSION['ids'] as $key => $data) { ?>
+		<?php foreach (array_unique($_SESSION['ids']) as $key => $data) { ?>
 
 		<?php $curl = curl_init();
 			curl_setopt_array($curl, array(
-			  CURLOPT_URL => "https://api.themoviedb.org/3/movie/". $data ."?&api_key=d6ed539a741ec0415b9f5118b1645d93",
+			  CURLOPT_URL => "https://api.themoviedb.org/3/movie/". $data ."?&api_key=".APIKEY,
 			  CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_ENCODING => "",
 			  CURLOPT_MAXREDIRS => 10,
@@ -75,11 +54,11 @@
 			} ?>
 			<td>			
 				<div class="card card-top" style="width: 20rem;">
-		  			<img class="card-img-top" src="<?php echo $responseConfig['images']['base_url'].'w92'.$response['poster_path'];?>" alt="Card image cap">
+		  			<img class="card-img-top" src="<?php echo BASEURL.'w92'.$response['poster_path'];?>" alt="Card image cap">
 					 <div class="card-block">
 					    <h4 class="card-title"><?php echo $response['original_title'];?></h4>
 					    <p class="card-text"><?php echo $response['release_date'];?></p>
-					    <a href="details.php?id='<?php echo $response['id'];?>'" class="btn btn-primary">Details</a>
+					    <a href="details.php?id=<?php echo $response['id'];?>" class="btn btn-primary">Details</a>
 					 </div>
 				</div>
 			</td>	
@@ -88,6 +67,7 @@
 		<?php } ?>
 		</tr></table>
 	</div>
+	<hr>
 </div>
 
 <div class="container">
@@ -96,6 +76,6 @@
 </div>
 
 <?php 
-	$customJS = "<script type='text/javascript'> var movie_ids = '<?php echo $_SESSION;?>'; </script><script type='text/javascript' src='js/search.js'></script>";
+	$customJS = "<script type='text/javascript' src='js/search.js'></script>";
 	require_once 'includes/footer.php';
 ?>
